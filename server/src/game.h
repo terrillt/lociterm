@@ -26,6 +26,8 @@
 #include "iostats.h"
 #include <netinet/tcp.h>
 
+#include "loci_tcpinfo.h"
+
 /* global #defines */
 #define USER_CALLBACK_CLIENT_CONNECTION_ERROR 1001
 
@@ -42,7 +44,7 @@ typedef struct game_conn {
 	int ssl;						/* for ease of access */
 
 	struct iostat_data *ios;		/* iostat structure for bytes in/out */
-	struct tcp_info tcp_info;		/* for monitoring tcp stats like rtt */
+	struct loci_tcp_info tcp_info;	/* for monitoring tcp stats like rtt */
 
 	int check_wait;					/* Protocol verification timer */
 	int check_protocol;				/* Protocol verification flags */

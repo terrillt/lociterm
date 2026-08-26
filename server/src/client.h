@@ -26,6 +26,8 @@
 #include "iostats.h"
 #include <netinet/tcp.h>
 
+#include "loci_tcpinfo.h"
+
 /* global #defines */
 
 /* These defines MUST MATCH the ones in ../../client/lociterm.js ! */
@@ -58,7 +60,7 @@ typedef struct client_conn {
 	int connections;
 
 	struct iostat_data *ios;		/* iostat structure for bytes in/out */
-	struct tcp_info tcp_info;		/* for monitoring tcp stats like rtt */
+	struct loci_tcp_info tcp_info;	/* for monitoring tcp stats like rtt */
 
 	char *hostname;					/* Hostname of the calling client. */
 	char *hostforwarder;			/* Name of the forwarder or client. */

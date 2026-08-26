@@ -45,7 +45,7 @@ LOCI_CFILES = locid.c debug.c proxy.c client.c game.c connect.c telnet.c libteln
 # automatically from the LOCI_CFILES list.  However, not everything in LOCI_CFILES
 # has a corresponding .h file.  MISSING_HFILES lists the .h's that aren't
 # expected to exist.  ADDITIONAL_HFILES lists the .h's for which no .c exists.
-ADDITIONAL_HFILES = 
+ADDITIONAL_HFILES = loci_tcpinfo.h
 MISSING_HFILES = 
 
 # CDEBUG, use -g for gdb symbols.  For gprof, add -pg and -no-pie.
@@ -66,7 +66,11 @@ endif
 
 # #### Flags and linklibs definitions ####
 
-CFLAGS = -I/usr/local/include -Wall -Wno-discarded-qualifiers -Wno-unused-variable -Wno-unused-function -Wno-unused-but-set-variable -DHAVE_ZLIB -DHAVE_ZSTD
+# gcc and clang spell this warning suppression differently.  Recursive
+# expansion so $(CC) is resolved at use time, after any CC defaulting.
+WNO_DISCARDED_QUALIFIERS = $(if $(findstring clang,$(shell $(CC) --version 2>/dev/null)),-Wno-incompatible-pointer-types-discards-qualifiers,-Wno-discarded-qualifiers)
+
+CFLAGS = -I/usr/local/include -Wall $(WNO_DISCARDED_QUALIFIERS) -Wno-unused-variable -Wno-unused-function -Wno-unused-but-set-variable -DHAVE_ZLIB -DHAVE_ZSTD
 CFLAGS += `pkg-config --cflags glib-2.0`
 CFLAGS += `pkg-config --cflags libwebsockets`
 CFLAGS += `pkg-config --cflags json-c`
@@ -90,7 +94,11 @@ LINKLIBS += `pkg-config --libs libzstd`
 # #### ############################################# ###
 
 
+# Default to gcc, but respect a CC given in the environment or on the
+# command line (e.g. 'make CC=cc' for the system compiler on macOS).
+ifeq ($(origin CC),default)
 CC=gcc
+endif
 BUILD = ./build
 
 CFILES = $(LOCI_CFILES)
@@ -146,9 +154,10 @@ $(BUILD)/$(LOCI) : $(LOCI_OFILES)
 $(BUILD)/%.o : %.c
 	$(CC) $(CDEBUG) $(CDEFINES) $(CFLAGS) -MMD -c $< -o $(@)
 
-# Updating the tags file...
+# Updating the tags file...  The - keeps a missing or incompatible ctags
+# (e.g. the BSD one on macOS) from failing the build.
 tags : $(HFILES) $(CFILES)
-	ctags $(HFILES) $(CFILES)
+	-ctags $(HFILES) $(CFILES)
 
 # Cleaning up...
 # .PHONY just means 'not really a filename to check for'

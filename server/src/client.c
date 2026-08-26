@@ -461,10 +461,10 @@ int callback_loci_client(struct lws *wsi, enum lws_callback_reasons reason,
 		iostat_checkpoint(pc->client->ios,0.9);
 
 		/* grab a copy of the current tcp info */
-		int infolen = sizeof(struct tcp_info);
+		int infolen = sizeof(struct loci_tcp_info);
 		getsockopt(
 			lws_get_socket_fd(wsi),
-			IPPROTO_TCP,TCP_INFO,
+			IPPROTO_TCP,LOCI_TCP_INFO,
 			&(pc->client->tcp_info),
 			(socklen_t *)&infolen
 		);

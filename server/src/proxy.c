@@ -602,12 +602,12 @@ void loci_client_send_netstat(proxy_conn_t *pc) {
 	);
 	json_object_object_add(cobj,"rtt",
 		json_object_new_int(
-			pc->client->tcp_info.tcpi_rtt
+			loci_tcpi_rtt(pc->client->tcp_info)
 		)
 	);
 	json_object_object_add(cobj,"rttvar",
 		json_object_new_int(
-			pc->client->tcp_info.tcpi_rttvar
+			loci_tcpi_rttvar(pc->client->tcp_info)
 		)
 	);
 
@@ -650,12 +650,12 @@ void loci_client_send_netstat(proxy_conn_t *pc) {
 		);
 		json_object_object_add(gobj,"rtt",
 			json_object_new_int(
-				pc->game->tcp_info.tcpi_rtt
+				loci_tcpi_rtt(pc->game->tcp_info)
 			)
 		);
 		json_object_object_add(gobj,"rttvar",
 			json_object_new_int(
-				pc->game->tcp_info.tcpi_rttvar
+				loci_tcpi_rttvar(pc->game->tcp_info)
 			)
 		);
 
