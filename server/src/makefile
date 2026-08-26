@@ -25,10 +25,17 @@
 LOCI = locid
 
 # Ideally, this should match the LOCITERM_VERSION in the toplevel makefile.
-# This is only here so that if you make only the server, there's at least some
-# version number.
+# When building only the server, derive the core version from the toplevel
+# makefile so standalone builds report the real version; the -dev$(TS)
+# suffix still marks them as not-the-blessed-full-build. Falls back to a
+# hardcoded number only if the toplevel makefile isn't found.
 TS = $(shell date +%H%M%S)
+TOPLEVEL_CORE := $(shell sed -n 's/^LOCITERM_CORE[[:space:]]*[:?]*=[[:space:]]*//p' ../../makefile 2>/dev/null | sed -e 's/[[:space:]]*\#.*//' -e 's/[[:space:]]*$$//' | head -1)
+ifeq ($(TOPLEVEL_CORE),)
 LOCITERM_VERSION ?= 2.9.0-dev$(TS)
+else
+LOCITERM_VERSION ?= $(TOPLEVEL_CORE)-dev$(TS)
+endif
 
 # If your version of libwebsocket has a broken permessage-deflate handler (i.e.
 # libwebsockets main branch, with git commit
