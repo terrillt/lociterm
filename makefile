@@ -37,6 +37,10 @@ LOCITERM_CORE = 2.16.1
 # META_NAME = MyGame
 # META_VERSION = 1.0.0
 #
+# SK: META_VERSION tracks the SKMUD release that last changed this fork
+# (LOCITERM_CORE stays upstream's; it moves only via upstream sync).
+META_NAME = SK
+META_VERSION = 6.0.0
 
 # #### Variable definitions ####
 BUILD = ./dist
