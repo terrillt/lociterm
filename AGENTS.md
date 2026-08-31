@@ -7,6 +7,18 @@ same author as MUDitM, LGPL-3.0-or-later). This fork adds macOS build
 support and SKMUD feature-environment configuration; it serves as the
 SK browser gateway and the GMCP validation surface.
 
+## Authority
+
+This is a git submodule of SKMUD. All write restrictions in the parent
+repo's root `AGENTS.md` ("Authority and Write Restrictions") apply
+here — commits and pushes here move the gitlink every SKMUD checkout
+resolves against.
+
+Additional fork constraints:
+- Changes must not rely on tools or patterns the upstream author isn't
+  using. Test with stock system toolchain.
+- Branch discipline: see **Branch Strategy** below.
+
 **Docs boundary (IMPORTANT):** upstream owns `docs/` content that
 predates the fork -- protocol specs (`loci.menu.txt`,
 `loci.hotkey.txt`, `mud-mode.txt`, ...) and `docs/dbupgrades/`.
